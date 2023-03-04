@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, library_private_types_in_public_api, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() => runApp(Calculator());
 
@@ -45,6 +46,20 @@ class _SimpleCalculatorState extends State<SimpleCalculator> {
       } else if (buttonText == "=") {
         equationFontSize = 38.0;
         resultFontSize = 48.0;
+        expression = equation;
+        expression = expression.replaceAll("×", '*');
+        expression = expression.replaceAll("÷", '/');
+
+        try {
+          Parser p = Parser();
+          Expression exp = p.parse(expression);
+
+          ContextModel cm = ContextModel();
+
+          result = '${exp.evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
       } else {
         equationFontSize = 48.0;
         resultFontSize = 38.0;
